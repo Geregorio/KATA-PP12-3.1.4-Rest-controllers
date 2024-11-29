@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add User</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .form-container {
+            width: 300px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-label {
+            display: inline-block;
+            width: 100px;
+        }
+        .form-input {
+            display: inline-block;
+        }
+        .form-button {
+            margin-top: 20px;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 20px;
+        }
+        .link-item {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Add User</h1>
+<div class="container">
+    <div class="form-container">
+        <form th:action="@{/users/add}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name:</label>
+                <input type="text" id="firstName" th:field="*{firstName}" class="form-input" required/>
+            </div>
+            <div class="form-group">
+                <label for="secondName" class="form-label">Second Name:</label>
+                <input type="text" id="secondName" th:field="*{secondName}" class="form-input" required/>
+            </div>
+            <div class="form-group">
+                <label for="age" class="form-label">Age:</label>
+                <input type="number" id="age" th:field="*{age}" class="form-input" required/>
+            </div>
+            <div class="form-group form-button">
+                <input type="submit" value="Add User" />
+            </div>
+        </form>
+        <div th:if="${errorMessage}">
+            <p style="color:red;" th:text="${errorMessage}"></p>
+        </div>
+    </div>
+    <div class="links">
+        <a th:href="@{/users}" class="link-item">All Users</a>
+        <a th:href="@{/users/edit}" class="link-item">Edit Users</a>
+        <a th:href="@{/users/remove}" class="link-item">Remove User</a>
+    </div>
+</div>
+</body>
+</html>

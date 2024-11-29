@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit User</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .form-container {
+            flex: 3;
+        }
+
+        .links-container {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .link-item {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th, .table-container td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+
+        h1 {
+            text-align: left;
+            margin: 0 0 20px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Edit User</h1>
+<div class="container">
+    <div class="form-container">
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>First Name</th>
+                    <th>Second Name</th>
+                    <th>Age</th>
+                    <th>Actions</th>
+                </tr>
+                <tr th:each="user : ${userList}">
+                    <td>
+                        <form th:action="@{/users/edit}" method="post">
+                            <input type="text" name="firstName" th:value="${user.firstName}"/>
+                    </td>
+                    <td>
+                        <input type="text" name="secondName" th:value="${user.secondName}"/>
+                    </td>
+                    <td>
+                        <input type="number" name="age" th:value="${user.age}"/>
+                    </td>
+                    <td>
+                        <input type="hidden" name="id" th:value="${user.id}"/>
+                        <button type="submit">Save</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="links-container">
+        <a th:href="@{/users}" class="link-item">All Users</a>
+        <a th:href="@{/users/add}" class="link-item">Add User</a>
+        <a th:href="@{/users/remove}" class="link-item">Remove Users</a>
+    </div>
+</div>
+</body>
+</html>

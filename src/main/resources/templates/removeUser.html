@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove User</title>
+    <style>
+        .table-container {
+            display: flex;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 20px;
+        }
+        .link-item {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Remove User</h1>
+<br/><br/>
+<div class="table-container" th:if="${userList}">
+    <div>
+        <table border="1">
+            <tr>
+                <th>First Name</th>
+                <th>Second Name</th>
+                <th>Age</th>
+                <th>Actions</th>
+            </tr>
+            <tr th:each="user : ${userList}">
+                <td th:text="${user.firstName}">First Name</td>
+                <td th:text="${user.secondName}">Second Name</td>
+                <td th:text="${user.age}">Age</td>
+                <td>
+                    <!-- Форма для удаления пользователя -->
+                    <form th:action="@{/users/remove/delete}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <input type="hidden" name="id" th:value="${user.id}"/>
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="links">
+        <a th:href="@{/users}" class="link-item">All Users</a>
+        <a th:href="@{/users/add}" class="link-item">Add User</a>
+        <a th:href="@{/users/edit}" class="link-item">Edit User</a>
+    </div>
+</div>
+</body>
+</html>
