@@ -28,18 +28,21 @@
                 <th>First name</th>
                 <th>Second name</th>
                 <th>Age</th>
+                <th>Email</th>
             </tr>
             <tr th:each="user : ${userList}">
                 <td th:text="${user.firstName}">...</td>
                 <td th:text="${user.secondName}">...</td>
                 <td th:text="${user.age}">...</td>
+                <td th:text="${user.email}">...</td>
             </tr>
         </table>
     </div>
     <div class="links">
-        <a th:href="@{/users/add}" class="link-item">Add User</a>
-        <a th:href="@{/users/edit}" class="link-item">Edit Users</a>
-        <a th:href="@{/users/remove}" class="link-item">Remove User</a>
+        <a th:href="@{/admin/add}" class="link-item">Add User</a>
+        <a th:href="@{/admin/edit}" class="link-item">Edit Users</a>
+        <a th:href="@{/admin/remove}" class="link-item">Remove User</a>
+        <a th:href="@{/logout}" class="link-item">Logout</a>
     </div>
 </div>
 </body>

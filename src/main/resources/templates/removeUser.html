@@ -28,15 +28,17 @@
                 <th>First Name</th>
                 <th>Second Name</th>
                 <th>Age</th>
+                <th>Email</th>
                 <th>Actions</th>
             </tr>
             <tr th:each="user : ${userList}">
                 <td th:text="${user.firstName}">First Name</td>
                 <td th:text="${user.secondName}">Second Name</td>
                 <td th:text="${user.age}">Age</td>
+                <td th:text="${user.email}">Email</td>
                 <td>
                     <!-- Форма для удаления пользователя -->
-                    <form th:action="@{/users/remove/delete}" method="post" style="display:inline;">
+                    <form th:action="@{/admin/remove/delete}" method="post" style="display:inline;">
                         <input type="hidden" name="_method" value="delete"/>
                         <input type="hidden" name="id" th:value="${user.id}"/>
                         <button type="submit">Remove</button>
@@ -46,9 +48,10 @@
         </table>
     </div>
     <div class="links">
-        <a th:href="@{/users}" class="link-item">All Users</a>
-        <a th:href="@{/users/add}" class="link-item">Add User</a>
-        <a th:href="@{/users/edit}" class="link-item">Edit User</a>
+        <a th:href="@{/admin}" class="link-item">All Users</a>
+        <a th:href="@{/admin/add}" class="link-item">Add User</a>
+        <a th:href="@{/admin/edit}" class="link-item">Edit User</a>
+        <a th:href="@{/logout}" class="link-item">Logout</a>
     </div>
 </div>
 </body>
