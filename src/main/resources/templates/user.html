@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <title>User Info</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-
+<h1>User Info</h1>
+<br/><br/>
+<div class="container">
+    <div>
+        <table border="1">
+            <tr>
+                <th>First name</th>
+                <th>Second name</th>
+                <th>Age</th>
+                <th>Email</th>
+            </tr>
+                <td th:text="${user.firstName}">...</td>
+                <td th:text="${user.secondName}">...</td>
+                <td th:text="${user.age}">...</td>
+                <td th:text="${user.email}">...</td>
+            </tr>
+        </table>
+    </div>
+</div>
 </body>
 </html>

@@ -52,7 +52,6 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
-//  GrantedAuthority
     @Override
     public String getAuthority() {
         return getName();

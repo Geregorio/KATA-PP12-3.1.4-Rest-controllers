@@ -25,7 +25,6 @@ public class User implements UserDetails {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-////////// UserDetails/////////////
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -61,7 +60,6 @@ public class User implements UserDetails {
         return true;
     }
 
-//////////Own///////////
     public User(String firstName,
                 String secondName,
                 Integer age,

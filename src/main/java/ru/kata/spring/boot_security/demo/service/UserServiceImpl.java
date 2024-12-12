@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.model.User;
-
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
@@ -22,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     @Autowired
@@ -31,6 +28,7 @@ public class UserServiceImpl implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
+    @Override
     @PostConstruct
     public void initRoles() {
         if (roleRepository.count() == 0) {
@@ -39,7 +37,6 @@ public class UserServiceImpl implements UserDetailsService {
         }
     }
 
-    //////////UserDetailService////////////
     @Override
     public UserDetails loadUserByUsername(String secondName) throws UsernameNotFoundException {
         User user = findBySecondName(secondName);
@@ -53,15 +50,17 @@ public class UserServiceImpl implements UserDetailsService {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
-    //////////JpaRepository///////////////
+    @Override
     public User findBySecondName(String secondName) {
         return userRepository.findBySecondName(secondName);
     }
 
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    @Override
     public void save(User user){
         Role role = roleRepository.findByName("ROLE_USER");
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
@@ -70,29 +69,33 @@ public class UserServiceImpl implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 
+    @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
     }
 
-    /////////////Own///////////////
+    @Override
     public void editUser(String firstName,
                          String secondName,
                          Integer age,
                          Long id,
                          String email,
                          String password) {
+        User originUser = userRepository.getById(id);
         User changedUser = new User();
         changedUser.setId(id);
         changedUser.setFirstName(firstName);
-        changedUser.setEmail(secondName);
+        changedUser.setSecondName(secondName);
         changedUser.setAge(age);
         changedUser.setEmail(email);
         changedUser.setPassword(password);
+        changedUser.setRoles(originUser.getRoles());
         userRepository.save(changedUser);
     }
 }
