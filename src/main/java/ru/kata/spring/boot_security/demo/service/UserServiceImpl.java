@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String secondName) throws UsernameNotFoundException {
-        User user = findBySecondName(secondName);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User " + secondName + " not found");
+            throw new UsernameNotFoundException("Email " + email + " not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getSecondName(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
@@ -51,8 +51,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findBySecondName(String secondName) {
-        return userRepository.findBySecondName(secondName);
+    public User findByEmail(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("Email " + email + " not found (findByEmail UserServiceImpl)");
+        }
+        return user;
     }
 
     @Override
@@ -81,21 +85,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(String firstName,
-                         String secondName,
-                         Integer age,
-                         Long id,
-                         String email,
-                         String password) {
-        User originUser = userRepository.getById(id);
-        User changedUser = new User();
-        changedUser.setId(id);
-        changedUser.setFirstName(firstName);
-        changedUser.setSecondName(secondName);
-        changedUser.setAge(age);
-        changedUser.setEmail(email);
-        changedUser.setPassword(password);
-        changedUser.setRoles(originUser.getRoles());
+    public void editUser(User changedUser) {
         userRepository.save(changedUser);
+    }
+
+    @Override
+    public RoleRepository getRoleRepository() {
+        return roleRepository;
     }
 }
