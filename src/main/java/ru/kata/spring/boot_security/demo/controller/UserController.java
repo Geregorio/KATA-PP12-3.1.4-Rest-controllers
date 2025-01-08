@@ -27,12 +27,6 @@ public class UserController {
         model.addAttribute("rolesString", String.join(" ", user.getShortRoles()));
         model.addAttribute("activeSection", "user");
         model.addAttribute("pageTitle", "User page");
-        return "base3";
+        return "base";
     }
-
-//    @GetMapping
-//    public String getUserInfo(Model model, Principal principal) {
-//        model.addAttribute("user", userService.findByEmail(principal.getName()));
-//        return "base3";
-//    }
 }
