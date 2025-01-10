@@ -74,7 +74,7 @@
                                         <input type="password" id="password2" class="form-control" name="password2" th:value="${user.password}" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="selectedRole2" class="form-label">Role</label>
+                                        <label for="selectedRole" class="form-label">Role</label>
                                         <select id="selectedRole2" class="form-select" name="selectedRole2" required>
                                             <option value="ROLE_USER" th:selected="${user.getShortStringRoles().contains('USER')}">USER</option>
                                             <option value="ROLE_ADMIN" th:selected="${user.getShortStringRoles().contains('ADMIN')}">ADMIN</option>

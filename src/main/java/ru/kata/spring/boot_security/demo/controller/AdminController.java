@@ -46,6 +46,7 @@ public class AdminController {
                           @ModelAttribute("selectedRole") String selectedRole,
                           Model model) {
         try {
+            user.setRole(selectedRole);
             userService.save(user);
             return "redirect:/admin?activeTab=usersTable";
         } catch (Exception e) {
