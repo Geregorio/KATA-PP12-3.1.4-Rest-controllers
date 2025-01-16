@@ -66,7 +66,7 @@ public class AdminController {
     public String editUser(@RequestParam("firstName2") String firstName,
                            @RequestParam("secondName2") String secondName,
                            @RequestParam(value = "age2", required = false, defaultValue = "0") Integer age,
-                           @RequestParam("id") Long id,
+                           @RequestParam("id2") Long id,
                            @RequestParam("email2") String email,
                            @RequestParam("password2") String password,
                            @RequestParam("selectedRole2") String selectedRole2) {
