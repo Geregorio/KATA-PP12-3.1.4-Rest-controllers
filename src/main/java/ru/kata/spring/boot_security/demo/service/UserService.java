@@ -7,12 +7,12 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    public void initRoles();
-    public User findByEmail(String email);
-    public List<User> findAll();
-    public void save(User user);
-    public void deleteById(Long id);
-    public User getUserById(Long id);
-    public void editUser(User user);
-    public RoleRepository getRoleRepository();
+    void initRoles();
+    User findByEmail(String email);
+    List<User> findAll();
+    void save(User user);
+    void save(User user, String selectedRole);
+    void deleteById(Long id);
+    User getUserById(Long id);
+    RoleRepository getRoleRepository();
 }

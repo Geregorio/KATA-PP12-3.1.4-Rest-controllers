@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -34,20 +33,12 @@ public class AdminController {
         return "base";
     }
 
-    @GetMapping("/add")
-    public String showNewUserForm(Model model, String selectedRole) {
-        model.addAttribute("user", new User());
-        model.addAttribute("selectedRole", selectedRole);
-        return "base"; // Возвращаем base, так как новая вкладка будет отображаться внутри этой страницы
-    }
-
     @PostMapping("/add")
     public String addUser(@ModelAttribute("user") User user,
                           @ModelAttribute("selectedRole") String selectedRole,
                           Model model) {
         try {
-            user.setRole(selectedRole);
-            userService.save(user);
+            userService.save(user, selectedRole);
             return "redirect:/admin?activeTab=usersTable";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Invalid data. Please check your inputs.");
@@ -63,21 +54,9 @@ public class AdminController {
     }
 
     @PostMapping("/edit")
-    public String editUser(@RequestParam("firstName2") String firstName,
-                           @RequestParam("secondName2") String secondName,
-                           @RequestParam(value = "age2", required = false, defaultValue = "0") Integer age,
-                           @RequestParam("id2") Long id,
-                           @RequestParam("email2") String email,
-                           @RequestParam("password2") String password,
-                           @RequestParam("selectedRole2") String selectedRole2) {
-        User changedUser = userService.getUserById(id);
-        changedUser.setFirstName(firstName);
-        changedUser.setSecondName(secondName);
-        changedUser.setAge(age);
-        changedUser.setEmail(email);
-        changedUser.setPassword(password);
-        changedUser.setRole(selectedRole2);
-        userService.editUser(changedUser);
+    public String editUser(@ModelAttribute User user,
+                           @RequestParam("selectedRole") String selectedRole) {
+        userService.save(user, selectedRole);
         return "redirect:/admin?activeTab=usersTable";
     }
 }

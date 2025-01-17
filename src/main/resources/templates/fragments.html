@@ -52,35 +52,36 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+
                                 <form action="#" th:action="@{/admin/edit}" method="post" class="form-container mx-auto" style="max-width: 400px;">
-                                    <input type="hidden" name="id2" th:value="${user.id}">
+                                    <input type="hidden" name="id" th:value="${user.id}">
                                     <div class="mb-2 text-center">
-                                        <label for="id2" class="form-label fw-bold">ID</label>
-                                        <input type="text" id="id2" class="form-control" th:value="${user.id}" placeholder="ID" disabled>
+                                        <label for="id" class="form-label fw-bold">ID</label>
+                                        <input type="text" id="id" class="form-control" th:value="${user.id}" placeholder="ID" disabled>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <label for="firstName2" class="form-label fw-bold">First Name</label>
-                                        <input type="text" id="firstName2" class="form-control" name="firstName2" th:value="${user.firstName}" placeholder="First name" required>
+                                        <label for="firstName" class="form-label fw-bold">First Name</label>
+                                        <input type="text" id="firstName" class="form-control" name="firstName" th:value="${user.firstName}" placeholder="First name" required>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <label for="secondName2" class="form-label fw-bold">Last Name</label>
-                                        <input type="text" id="secondName2" class="form-control" name="secondName2" th:value="${user.secondName}" placeholder="Last name" required>
+                                        <label for="secondName" class="form-label fw-bold">Last Name</label>
+                                        <input type="text" id="secondName" class="form-control" name="secondName" th:value="${user.secondName}" placeholder="Last name" required>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <label for="age2" class="form-label fw-bold">Age</label>
-                                        <input type="number" id="age2" class="form-control" name="age2" th:value="${user.age}" placeholder="Age" required>
+                                        <label for="age" class="form-label fw-bold">Age</label>
+                                        <input type="number" id="age" class="form-control" name="age" th:value="${user.age}" placeholder="Age" required>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <label for="email2" class="form-label fw-bold">Email</label>
-                                        <input type="email" id="email2" class="form-control" name="email2" th:value="${user.email}" placeholder="Email" required>
+                                        <label for="email" class="form-label fw-bold">Email</label>
+                                        <input type="email" id="email" class="form-control" name="email" th:value="${user.email}" placeholder="Email" required>
                                     </div>
                                     <div class="mb-2 text-center">
-                                        <label for="password2" class="form-label fw-bold">Password</label>
-                                        <input type="password" id="password2" class="form-control" name="password2" th:value="${user.password}" placeholder="Password" required>
+                                        <label for="password" class="form-label fw-bold">Password</label>
+                                        <input type="password" id="password" class="form-control" name="password" th:value="${user.password}" placeholder="Password" required>
                                     </div>
                                     <div class="mb-3 text-center">
-                                        <label for="selectedRole2" class="form-label fw-bold">Role</label>
-                                        <select id="selectedRole2" class="form-select" name="selectedRole2" required>
+                                        <label for="selectedRole" class="form-label fw-bold">Role</label>
+                                        <select id="selectedRole" class="form-select" name="selectedRole" required>
                                             <option value="ROLE_USER" th:selected="${user.getShortStringRoles().contains('USER')}">USER</option>
                                             <option value="ROLE_ADMIN" th:selected="${user.getShortStringRoles().contains('ADMIN')}">ADMIN</option>
                                         </select>

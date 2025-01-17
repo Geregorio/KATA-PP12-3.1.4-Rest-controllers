@@ -38,11 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         User user = findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("Email " + email + " not found");
-        }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
@@ -72,6 +69,11 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
+    @Override
+    public void save(User user, String selectedRole) {
+        user.setRole(selectedRole);
+        userRepository.save(user);
+    }
 
     @Override
     public void deleteById(Long id) {
@@ -82,11 +84,6 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) {
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-    }
-
-    @Override
-    public void editUser(User changedUser) {
-        userRepository.save(changedUser);
     }
 
     @Override
