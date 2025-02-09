@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -32,8 +33,8 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     public void initRoles() {
         if (roleRepository.count() == 0) {
-            roleRepository.save(new Role (1L, "ROLE_ADMIN"));
-            roleRepository.save(new Role (2L, "ROLE_USER"));
+            roleRepository.save(new Role(1L, "ROLE_ADMIN"));
+            roleRepository.save(new Role(2L, "ROLE_USER"));
         }
     }
 
@@ -62,13 +63,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user){
+    public void save(User user) {
         Role role = roleRepository.findByName("ROLE_USER");
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             user.setRoles(List.of(role));
         }
         userRepository.save(user);
     }
+
     @Override
     public void save(User user, String selectedRole) {
         user.setRole(selectedRole);
@@ -76,8 +78,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public boolean deleteById(Long id) {
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -89,5 +96,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public RoleRepository getRoleRepository() {
         return roleRepository;
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
+    @Override
+    public Long getMaxId() {
+        return userRepository.findMaxId().orElse(0L);
     }
 }

@@ -9,7 +9,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/admin")
+//@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -19,20 +19,20 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public String getAdminPage(@RequestParam(value = "activeTab", defaultValue = "usersTable") String activeTab,
-            Model model, Principal principal) {
+                               Model model, Principal principal) {
         User user = userService.findByEmail(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("rolesList", user.getShortRoles());
         model.addAttribute("rolesString", String.join(" ", user.getShortRoles()));
         model.addAttribute("activeSection", "admin");
         model.addAttribute("activeTab", activeTab);
-        model.addAttribute("userList", userService.findAll()); // Список пользователей
-        model.addAttribute("pageTitle", "Admin Panel");
-        return "base";
+        //model.addAttribute("userList", userService.findAll()); // Список пользователей
+        //model.addAttribute("pageTitle", "Admin Panel");
+        return "base3";
     }
-
+/*
     @PostMapping("/add")
     public String addUser(@ModelAttribute("user") User user,
                           @ModelAttribute("selectedRole") String selectedRole,
@@ -59,4 +59,7 @@ public class AdminController {
         userService.save(user, selectedRole);
         return "redirect:/admin?activeTab=usersTable";
     }
+}
+
+ */
 }

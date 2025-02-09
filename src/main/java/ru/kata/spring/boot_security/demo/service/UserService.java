@@ -12,7 +12,9 @@ public interface UserService extends UserDetailsService {
     List<User> findAll();
     void save(User user);
     void save(User user, String selectedRole);
-    void deleteById(Long id);
+    boolean deleteById(Long id);
     User getUserById(Long id);
     RoleRepository getRoleRepository();
+    boolean existsById(Long id);
+    Long getMaxId();
 }
