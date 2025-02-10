@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api")
 public class RestAdminController {
 
     private final UserService userService;
@@ -20,10 +23,14 @@ public class RestAdminController {
         this.userService = userService;
     }
 
-    @PostMapping("/get_user")
-    public ResponseEntity<User> getUser(@RequestParam("id") Long id) {
-        if (userService.existsById(id)) {
-            return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    @GetMapping("/get_user")
+    public ResponseEntity<Map<String, Object>> getUser(Principal principal) {
+        if (userService.existsById(userService.findByEmail(principal.getName()).getId())) {
+            User user = userService.findByEmail(principal.getName());
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user);
+            response.put("shortRoles", user.getShortRoles());
+            return ResponseEntity.ok(response);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
