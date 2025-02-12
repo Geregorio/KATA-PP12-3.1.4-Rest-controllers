@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
-public class RestAdminController {
+public class RestController {
 
     private final UserService userService;
 
     @Autowired
-    public RestAdminController(UserService userService) {
+    public RestController(UserService userService) {
         this.userService = userService;
     }
 
@@ -38,7 +38,7 @@ public class RestAdminController {
 
     @GetMapping("/nextId")
     public ResponseEntity<Long> getNextId() {
-        Long nextId = userService.getMaxId() + 1; // метод, получающий максимальный ID
+        Long nextId = userService.getMaxId() + 1;
         return ResponseEntity.ok(nextId);
     }
 
@@ -76,7 +76,6 @@ public class RestAdminController {
                                       @RequestBody User user,
                                       @RequestParam String selectedRole) {
         if (userService.existsById(id)) {
-            //user.setId(id);
             userService.save(user, selectedRole);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
