@@ -11,8 +11,10 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.model.User;
+
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,13 +80,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -104,7 +101,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long getMaxId() {
-        return userRepository.findMaxId().orElse(0L);
+    public boolean existsByPrincipal(Principal principal) {
+        if (userRepository.existsByEmail(principal.getName())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public User getUser(Principal principal) {
+        User user = userRepository.findByEmail(principal.getName());
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found in DB");
+        }
+        return user;
     }
 }

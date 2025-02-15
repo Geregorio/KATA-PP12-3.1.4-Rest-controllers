@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -12,9 +13,11 @@ public interface UserService extends UserDetailsService {
     List<User> findAll();
     void save(User user);
     void save(User user, String selectedRole);
-    boolean deleteById(Long id);
+    void deleteById(Long id);
     User getUserById(Long id);
     RoleRepository getRoleRepository();
     boolean existsById(Long id);
-    Long getMaxId();
+    boolean existsByPrincipal(Principal principal);
+    User getUser(Principal principal);
+
 }

@@ -51,11 +51,11 @@ $(document).ready(function () {
 
         // User info top left on page
         function loadUserData() {
-            fetch("/api/get_user")
+            fetch("/api/user/get_user")
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("userEmail").textContent = data.user.email;
-                    document.getElementById("shortRoles").textContent = data.shortRoles.join(", ");
+                    document.getElementById("userEmail").textContent = data.email;
+                    document.getElementById("shortRoles").textContent = data.shortStringRoles;
 
                     if (data.shortRoles.includes("ADMIN")) {
                         document.getElementById("adminTabBtn").classList.remove("d-none");
@@ -73,12 +73,11 @@ $(document).ready(function () {
 
         // Загрузка всех пользователей
         function loadUsers() {
-            fetch('/api/all_users')
+            fetch('/api/admin/all_users')
                 .then(response => response.json())
                 .then(data => {
                     const tbody = $('#usersTableBody');
                     tbody.empty();
-
                     data.forEach(user => {
                         tbody.append(`
                         <tr>
@@ -105,11 +104,11 @@ $(document).ready(function () {
         }
 
         function loadCurrentUser() {
-            fetch('/api/get_user')
+            fetch('/api/user/get_user')
                 .then(response => response.json())
                 .then(data => {
                     const tbody = $('#currentUserTableBody');
-                    const user = data.user;
+                    const user = data;
                     tbody.empty();
                     tbody.html(`
                 <tr>
@@ -125,54 +124,47 @@ $(document).ready(function () {
                 .catch(error => console.error('Error uploading data:', error));
         }
 
-
         // Add User
         $('#newUserForm').submit(function (e) {
             e.preventDefault();
 
-            fetch('/api/nextId')
-                .then(response => response.json())
-                .then(nextId => {
-                    const user = {
-                        id: nextId,
-                        firstName: $('#newFirstName').val(),
-                        secondName: $('#newSecondName').val(),
-                        age: $('#newAge').val(),
-                        email: $('#newEmail').val(),
-                        password: $('#newPassword').val(),
-                        selectedRole: $('#newSelectedRole').val()
-                    };
+            const user = {
+                firstName: $('#newFirstName').val(),
+                secondName: $('#newSecondName').val(),
+                age: $('#newAge').val(),
+                email: $('#newEmail').val(),
+                password: $('#newPassword').val(),
+                selectedRole: $('#newSelectedRole').val()
+            };
 
-                    fetch(`/api/add?selectedRole=${user.selectedRole}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(user)
-                    })
-                        .then(response => {
-                            if (response.status === 201) {
-                                $('#newUserForm')[0].reset();
-                                loadUsers();
+            fetch(`/api/admin/add?selectedRole=${user.selectedRole}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+                .then(response => {
+                    if (response.status === 201) {
+                        $('#newUserForm')[0].reset();
+                        loadUsers();
 
-                                // Переключаем вкладку с формой на таблицу пользователей
-                                let usersTableTab = new bootstrap.Tab(document.querySelector('#usersTableTabBtn'));
-                                usersTableTab.show();
+                        // Переключаем вкладку с формой на таблицу пользователей
+                        let usersTableTab = new bootstrap.Tab(document.querySelector('#usersTableTabBtn'));
+                        usersTableTab.show();
 
-                                // Добавляем активные классы к таблице и убираем у формы
-                                $('#usersTableSection').removeClass('d-none');
-                                $('#usersTableSection').addClass('active');
+                        // Добавляем активные классы к таблице и убираем у формы
+                        $('#usersTableSection').removeClass('d-none');
+                        $('#usersTableSection').addClass('active');
 
-                            } else if (response.status === 226) {
-                                alert('User with this ID already exists')
-                            } else {
-                                alert('Failed to add new user')
-                            }
-                        })
-                        .catch(error => console.error('Error adding user:', error));
-                });
-        })
-
+                    } else if (response.status === 226) {
+                        alert('User already exists');
+                    } else {
+                        alert('Failed to add new user');
+                    }
+                })
+                .catch(error => console.error('Error adding user:', error));
+        });
 
         // Обработчик кнопки "Delete"
         // Извлекаем данные пользователя из строки таблицы, к которой привязана кнопка
@@ -204,7 +196,7 @@ $(document).ready(function () {
 
             const userId = $('#deleteUserId').val();
 
-            fetch(`/api/delete?id=${userId}`, {
+            fetch(`/api/admin/delete?id=${userId}`, {
                 method: 'DELETE',
             })
                 .then(response => {
@@ -262,7 +254,7 @@ $(document).ready(function () {
                 selectedRole: $('#editSelectedRole').val()
             };
 
-            fetch(`/api/edit?id=${user.id}&selectedRole=${user.selectedRole}`, {
+            fetch(`/api/admin/edit?id=${user.id}&selectedRole=${user.selectedRole}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
