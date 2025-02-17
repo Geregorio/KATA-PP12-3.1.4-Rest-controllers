@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        User user = findByEmail(email);
+        User user = findUserByEmail(email);
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+    public User findUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("Email " + email + " not found (findByEmail UserServiceImpl)");
         }
@@ -60,12 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public void save(User user) {
+    public void saveUser(User user) {
         Role role = roleRepository.findByName("ROLE_USER");
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             user.setRoles(List.of(role));
@@ -74,14 +74,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user, String selectedRole) {
+    public void saveUser(User user, String selectedRole) {
         user.setRole(selectedRole);
         userRepository.save(user);
     }
 
     @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteUserById(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("No user with such ID");
+        }
     }
 
     @Override
@@ -102,15 +106,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean existsByPrincipal(Principal principal) {
-        if (userRepository.existsByEmail(principal.getName())) {
-            return true;
-        }
-        return false;
+        return userRepository.existsByEmail(principal.getName());
     }
 
     @Override
     public User getUser(Principal principal) {
-        User user = userRepository.findByEmail(principal.getName());
+        User user = userRepository.findUserByEmail(principal.getName());
         if (user == null) {
             throw new UsernameNotFoundException("User not found in DB");
         }
